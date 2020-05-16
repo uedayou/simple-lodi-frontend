@@ -11,6 +11,9 @@ React による シングルページアプリケーション として作成し
 </div>
 <center>表示例</center>
 
+デモサイト
+<https://uedayou.net/simple-lodi-frontend/>
+`window.uri = "http://uedayou.net/loa/東京都千代田区永田町一丁目1";`を指定しています。
 
 以下のサイトについて、表示できることを確認しています。
 
