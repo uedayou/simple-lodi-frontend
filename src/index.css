@@ -11,3 +11,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.leaflet-container {
+  /*width: 100%;*/
+  height: 400px;
+  margin: 10px;
+}
+
+td img {
+  max-width: 300px;
+}
+
+.read-more-button {
+  /*display: inline-block;*/
+  margin-left: 3px;
+  color: #286DA8;
+  cursor: pointer;
+}
