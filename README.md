@@ -9,11 +9,11 @@ React による シングルページアプリケーション として作成し
 <div align="center">
 <img src="https://uedayou.net/simple-lodi-frontend-demo.jpg" width="500px" />
 </div>
-<center>表示例</center>
+<div style="text-align: center;">表示例</div>
 
-デモサイト
-<https://uedayou.net/simple-lodi-frontend/>
-`window.uri = "http://uedayou.net/loa/東京都千代田区永田町一丁目1";`を指定しています。
+デモサイト:  
+<https://uedayou.net/simple-lodi-frontend/>  
+`window.uri = "http://uedayou.net/loa/東京都千代田区永田町一丁目1";`を指定しています。  
 
 以下のサイトについて、表示できることを確認しています。
 
