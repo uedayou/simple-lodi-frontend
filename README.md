@@ -6,10 +6,11 @@ React による シングルページアプリケーション として作成し
 このアプリは、Simple LODI以外でもRDF(Turtleファイルのみ)をHTMLとして表示することができます。
 また、CORSに対応するLODサイトのRDFデータも対応します。
 
-<div align="center">
+<p align="center">
 <img src="https://uedayou.net/simple-lodi-frontend-demo.jpg" width="500px" />
-</div>
-<div style="text-align: center;">表示例</div>
+<br />
+表示例
+</p>
 
 デモサイト:  
 <https://uedayou.net/simple-lodi-frontend/>  
