@@ -7,7 +7,7 @@ import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Rdf from './Rdf';
-
+import { getLink } from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -32,7 +32,6 @@ function Uris({ uris, target }:Props) {
       { (uris && uris[target]) &&
         <div className={classes.divider}>
           { createElements(uris, target) }
-          <Helmet title={ titles[target] || target} />
         </div>
       }
       { uris && Object.keys(uris).map((_uri:string, index:number)=>(
@@ -52,16 +51,13 @@ function Uris({ uris, target }:Props) {
           <Typography variant="h3" gutterBottom>
             { titles[_uri] }
           </Typography>
+          <Helmet title={ titles[_uri] || _uri } />
           <Typography variant="subtitle1" gutterBottom>
-            <a href={ _uri }>
-              { _uri }
-            </a>
+            { getLink(_uri) }
           </Typography>
         </Box> :
         <Typography variant="h6" gutterBottom>
-          <a href={ _uri }>
-            { _uri }
-          </a>
+          { getLink(_uri) }
         </Typography>
       }
       <Rdf rdfs={ _uris[_uri] } />

@@ -11,12 +11,12 @@ function Bnode({ bnode }:Props) {
     { bnode && Object.keys(bnode).map((k:string, i:number)=>(
       <tr key={i}>
         <th className="bnode">
-          { getLink(bnode[k]) }
+          { getLink(k) }
         </th>
         <td>
           { bnode[k].map((vo:any, i2:number)=>(
             <div key={i+"-"+i2}>
-              { getLink(vo) }
+              { getLink(vo.value) }
             </div>
           ))}
         </td>

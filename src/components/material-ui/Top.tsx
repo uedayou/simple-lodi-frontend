@@ -34,7 +34,6 @@ function Top({uri}:Props) {
   
   async function getData(url:string) {
     const data = await getHttpData(url);
-    // console.log(data);
     if (data && typeof data !== "string") {
       if (data[url] ) {
         if (data[url]["http://xmlns.com/foaf/0.1/primaryTopic"])

@@ -84,9 +84,10 @@ function getProp(key:string) {
 
 function getValues(v:any) {
   if (v) {
-    if (v.type && v.type === "bnode") {
+    if (v.termType === "BlankNode") {
+      delete v.termType;
       return (<Bnode bnode={v} />);
-    } else if (v.value) {
+    } else {
       return getLink(v.value);
     }
   }
