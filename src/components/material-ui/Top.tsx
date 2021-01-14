@@ -33,6 +33,8 @@ function Top({uri}:Props) {
   const [result, setResult] = useState(initialState)
   
   async function getData(url:string) {
+    // debug
+    //url = url.replace("http://localhost:3000/", "https://uedayou.net/");
     const data = await getHttpData(url);
     if (data && typeof data !== "string") {
       if (data[url] ) {

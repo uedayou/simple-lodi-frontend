@@ -13,9 +13,10 @@ export async function getHttpData(_url:string){
     _url += "index";
   }
   try {
-    const res:any = await axios.get(_url,{
-      headers: (ext.length!==0 ? {} : { Accept: "text/turtle" })
-    });
+    const res:any = await axios.get(
+      _url+`?timestamp=${new Date().getTime()}`,
+      { headers: (ext.length!==0 ? {} : { Accept: "text/turtle" }) }
+    );
     if (!res.data) return;
     else if (typeof res.data === "string") {
       //let text = res.data.replace(/\\u([\d\w]{4})/gi,
@@ -29,10 +30,14 @@ export async function getHttpData(_url:string){
   }
 }
 
-export function getGeoJsonFromWkt(wkt:string) {
+export function getGeoJsonFromWkt(wkt:string, name?:string, uri?:string) {
   let obj = WktParser(wkt);
+  let properties = {}
+  if (name&&uri) {
+    properties = { name, uri };
+  }
   const json = {
-    properties: {},
+    properties,
     type: 'Feature' as const,
     geometry: {...obj}
   };
@@ -47,6 +52,8 @@ export function getLink(text:string) {
       </a>
     );
   } else if (text.match(new RegExp("^https?://.+$","i")) || text.match(new RegExp("^mailto:.+$"))) {
+    // debug
+    // text = text.replace("https://uedayou.net/", "http://localhost:3000/");
     const urlObj = url.parse(text);
     const hostname = urlObj.hostname;
     let link = text;
