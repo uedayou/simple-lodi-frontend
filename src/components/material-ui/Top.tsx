@@ -34,7 +34,7 @@ function Top({uri}:Props) {
   
   async function getData(url:string) {
     // debug
-    //url = url.replace("http://localhost:3000/", "https://uedayou.net/");
+    // url = url.replace("http://localhost:3000/", "https://uedayou.net/");
     const data = await getHttpData(url);
     if (data && typeof data !== "string") {
       if (data[url] ) {
@@ -43,15 +43,22 @@ function Top({uri}:Props) {
         if (data[url]["http://schema.org/about"])
           url = data[url]["http://schema.org/about"][0].value;
       }
-      setResult({
-        uri: url,
-        object: data
-      })
+      //setResult({ uri: url, object: data })
+      return { uri: url, object: data };
     }
   }
 
   useEffect(() => {
-    getData(uri);
+    let isSubscribed = true;
+    (async()=>{
+      const obj = await getData(uri);
+      if (isSubscribed && obj) {
+        setResult(obj);
+      }
+    })();
+    return () => {
+      isSubscribed = false;
+    }
   }, [uri]);
 
   return (
