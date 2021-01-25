@@ -7,7 +7,7 @@ import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Rdf from './Rdf';
-import { getLink } from '../../utils';
+import { getLink } from '../../lib/utils';
 
 const useStyles = makeStyles((theme) => ({
   main: {

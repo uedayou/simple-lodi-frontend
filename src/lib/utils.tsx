@@ -6,7 +6,27 @@ import axios from 'axios';
 import {parse as WktParser} from 'wellknown';
 import {Parser as N3Parser} from 'n3';
 
-export async function getHttpData(_url:string){
+// デバッグ時
+const DEBUG_MODE: boolean = false;
+const DEBUG_REPLACE_URL: string = "https://uedayou.net/";
+
+export function convUrlInDebug(url: string) {
+  if (DEBUG_MODE) {
+    if (url.match(/http:\/\/localhost:3000\//)) {
+      url = url.replace("http://localhost:3000/", DEBUG_REPLACE_URL);
+    } else {
+      url = url.replace(DEBUG_REPLACE_URL, "http://localhost:3000/");
+    }
+  }
+  return url;
+}
+// デバッグ時
+
+export async function getHttpData(
+  _url: string, 
+  acceptType: string="application/json"
+){
+  // acceptType = "text/turtle";
   const _path = url.parse(_url).path || "";
   let ext = path.extname(_path);
   if (path.basename(_path).length === 0) {
@@ -14,16 +34,18 @@ export async function getHttpData(_url:string){
   }
   try {
     const res:any = await axios.get(
-      _url+`?timestamp=${new Date().getTime()}`,
-      { headers: (ext.length!==0 ? {} : { Accept: "text/turtle" }) }
+      `${_url}?timestamp=${new Date().getTime()}`,
+      { headers: (ext.length!==0 ? {} : { Accept: acceptType }) }
     );
     if (!res.data) return;
     else if (typeof res.data === "string") {
       //let text = res.data.replace(/\\u([\d\w]{4})/gi,
       //  (match:string, grp:string)=>String.fromCharCode(parseInt(grp, 16)));
-      return convObjectFromTurtle(res.data);
+      return acceptType.match(/turtle/) 
+        ? convObjectFromTurtle(res.data) :
+        convObjectFromJson(JSON.parse(res.data));
     } else {
-      return res.data;
+      return convObjectFromJson(res.data);
     }
   } catch (e) {
     console.error(e);
@@ -45,6 +67,7 @@ export function getGeoJsonFromWkt(wkt:string, name?:string, uri?:string) {
 }
 
 export function getLink(text:string) {
+  text = ""+text;
   if (text.match(new RegExp("^https?://.+?.(jpg|jpeg|gif|png)$","i"))) {
     return (
       <a href={ text } target="_blank" rel="noreferrer noopener">
@@ -52,8 +75,7 @@ export function getLink(text:string) {
       </a>
     );
   } else if (text.match(new RegExp("^https?://.+$","i")) || text.match(new RegExp("^mailto:.+$"))) {
-    // debug
-    // text = text.replace("https://uedayou.net/", "http://localhost:3000/");
+    text = convUrlInDebug(text);
     const urlObj = url.parse(text);
     const hostname = urlObj.hostname;
     let link = text;
@@ -97,6 +119,7 @@ function splitUri(uri:string, prefixes:any) {
 }
 
 function convObjectFromTurtle(ttl:string) {
+  console.log("turtle");
   const triples = (new N3Parser()).parse(ttl);
   const rdfs:any = {}
   let blanks = triples.filter(f=>f.subject.termType === "BlankNode");
@@ -124,6 +147,22 @@ function convObjectFromTurtle(ttl:string) {
     rdfs[s.subject.value][s.predicate.value] = [s.object];
   }
   return rdfs;
+}
+
+function convObjectFromJson(json: any) {
+  for (const skey in json) {
+    for (const pkey in json[skey]) {
+      const predicts = json[skey][pkey]
+      for (const idx in predicts) {
+        const o = predicts[idx];
+        if (o.type === "bnode") {
+          predicts[idx] = json[o.value];
+          delete json[o.value];
+        }
+      }
+    }
+  }
+  return json;
 }
 
 const namespaces = {

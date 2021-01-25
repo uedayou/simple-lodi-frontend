@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import Uris from './Uris';
 
-import {getHttpData} from '../../utils'
+import { getHttpData } from '../../lib/utils'
 
 type Result = {
   uri: string

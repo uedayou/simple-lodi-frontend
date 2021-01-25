@@ -4,7 +4,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Uris from './Uris';
 
-import {getHttpData} from '../../utils'
+import {
+  getHttpData,
+  convUrlInDebug
+} from '../../lib/utils'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,8 +36,7 @@ function Top({uri}:Props) {
   const [result, setResult] = useState(initialState)
   
   async function getData(url:string) {
-    // debug
-    // url = url.replace("http://localhost:3000/", "https://uedayou.net/");
+    url = convUrlInDebug(url);
     const data = await getHttpData(url);
     if (data && typeof data !== "string") {
       if (data[url] ) {
@@ -43,7 +45,6 @@ function Top({uri}:Props) {
         if (data[url]["http://schema.org/about"])
           url = data[url]["http://schema.org/about"][0].value;
       }
-      //setResult({ uri: url, object: data })
       return { uri: url, object: data };
     }
   }

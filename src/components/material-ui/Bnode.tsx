@@ -1,5 +1,5 @@
 import React from 'react';
-import { getLink } from '../../utils';
+import { getLink } from '../../lib/utils';
 
 type Props = {
   bnode: any

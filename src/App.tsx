@@ -4,6 +4,7 @@ import React from 'react';
 
 import Top from './components/material-ui/Top'
 
+// bs4 版はメンテナンスしていません。
 //import Top from './components/bs4/Top'
 //import 'bootstrap/dist/css/bootstrap.min.css';
 

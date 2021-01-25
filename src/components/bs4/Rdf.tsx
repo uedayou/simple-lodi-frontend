@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {shorten, getGeoJsonFromWkt, getLink} from '../../utils';
+import {shorten, getGeoJsonFromWkt, getLink} from '../../lib/utils';
 
 import Bnode from './Bnode'
 import Map from './Map'

@@ -10,7 +10,11 @@ import Paper from '@material-ui/core/Paper';
 import Bnode from './Bnode'
 import Map from './Map'
 
-import {shorten, getGeoJsonFromWkt, getLink} from '../../utils';
+import {
+  shorten,
+  getGeoJsonFromWkt,
+  getLink
+} from '../../lib/utils';
 
 type Props = {
   rdfs: any
