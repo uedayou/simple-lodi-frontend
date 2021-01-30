@@ -10,7 +10,7 @@ type Props = {
   geojson: any
 }
 
-function Map({geojson}:Props) {
+function Map({ geojson }: Props) {
   let mapRef:any;
   return (
     <MapElem ref={(ref) => { mapRef = ref; }} center={[35, 135]} zoom={10}>

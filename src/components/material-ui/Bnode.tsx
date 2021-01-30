@@ -5,7 +5,7 @@ type Props = {
   bnode: any
 }
 
-function Bnode({ bnode }:Props) {
+function Bnode({ bnode }: Props) {
   return (
     <table className='table table-bordered'>
     { bnode && Object.keys(bnode).map((k:string, i:number)=>(

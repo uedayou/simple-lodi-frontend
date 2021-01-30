@@ -8,32 +8,39 @@ import {Parser as N3Parser} from 'n3';
 
 // デバッグ時
 const DEBUG_MODE: boolean = false;
-const DEBUG_REPLACE_URL: string = "https://uedayou.net/";
+const DEBUG_REPLACE_URL: string = "https://uedayou.net/loa/";
+const DEBUG_REPLACE_HOSTNAME: string|null = null;
 
-export function convUrlInDebug(url: string) {
+export function convUrlInDebug(
+  _url: string, 
+  replacement?: string
+) {
+  replacement = replacement
+    || DEBUG_REPLACE_HOSTNAME
+    || `http://${window.location.hostname}:${window.location.port}/`;
   if (DEBUG_MODE) {
-    if (url.match(/http:\/\/localhost:3000\//)) {
-      url = url.replace("http://localhost:3000/", DEBUG_REPLACE_URL);
+    if (_url.match(replacement)) {
+      _url = _url.replace(replacement, DEBUG_REPLACE_URL);
     } else {
-      url = url.replace(DEBUG_REPLACE_URL, "http://localhost:3000/");
+      _url = _url.replace(DEBUG_REPLACE_URL, replacement);
     }
   }
-  return url;
+  return _url;
 }
 // デバッグ時
 
 export async function getHttpData(
   _url: string, 
-  acceptType: string="application/json"
+  acceptType: string="text/turtle"
 ){
-  // acceptType = "text/turtle";
+  // acceptType = "application/json";
   const _path = url.parse(_url).path || "";
   let ext = path.extname(_path);
   if (path.basename(_path).length === 0) {
     _url += "index";
   }
   try {
-    const res:any = await axios.get(
+    const res = await axios.get(
       `${_url}?timestamp=${new Date().getTime()}`,
       { headers: (ext.length!==0 ? {} : { Accept: acceptType }) }
     );
@@ -52,7 +59,11 @@ export async function getHttpData(
   }
 }
 
-export function getGeoJsonFromWkt(wkt:string, name?:string, uri?:string) {
+export function getGeoJsonFromWkt(
+  wkt:string, 
+  name?:string, 
+  uri?:string
+) {
   let obj = WktParser(wkt);
   let properties = {}
   if (name&&uri) {
@@ -67,14 +78,17 @@ export function getGeoJsonFromWkt(wkt:string, name?:string, uri?:string) {
 }
 
 export function getLink(text:string) {
-  text = ""+text;
+  //text = ""+text;
   if (text.match(new RegExp("^https?://.+?.(jpg|jpeg|gif|png)$","i"))) {
     return (
       <a href={ text } target="_blank" rel="noreferrer noopener">
         <img src={ text } alt={ path.basename(text) } />
       </a>
     );
-  } else if (text.match(new RegExp("^https?://.+$","i")) || text.match(new RegExp("^mailto:.+$"))) {
+  } else if (
+    text.match(new RegExp("^https?://.+$","i")) || 
+    text.match(new RegExp("^mailto:.+$"))
+  ) {
     text = convUrlInDebug(text);
     const urlObj = url.parse(text);
     const hostname = urlObj.hostname;
@@ -93,33 +107,35 @@ export function getLink(text:string) {
   return (<ReadMoreReact text={ text } />)
 }
 
-export function shorten(uri:any, prefixes:any=null){
+export function shorten(
+  uri: string, 
+  prefixes?: { [key:string] : string }
+) {
   const ns = (window as any).namespaces || namespaces;
-  if (!prefixes) prefixes = ns;
+  const _prefs = prefixes || ns;
   // if (!prefixes) return uri;
-  let parts:any = splitUri(uri,prefixes);
+  const parts = splitUri(uri, _prefs);
   if (parts) {
     return `${parts[0]}:${parts[1]}`
   }
   return uri;
 }
 
-function splitUri(uri:string, prefixes:any) {
-  if (!uri || uri === '')
-    return uri;
+function splitUri(
+  uri: string, 
+  prefixes: { [key:string] : string }
+) {
+  if (!uri || uri === '') return uri;
   for (const prefix of Object.keys(prefixes)){
     const long = prefixes[prefix];
-    if (uri.substr(0, long.length)!==long)
-      continue;
+    if (uri.substr(0, long.length)!==long) continue;
     const local_part = uri.substr(long.length);
-    if (local_part.indexOf('/') >= 0)
-      continue;
+    if (local_part.indexOf('/') >= 0) continue;
     return [prefix, local_part];
   };
 }
 
 function convObjectFromTurtle(ttl:string) {
-  console.log("turtle");
   const triples = (new N3Parser()).parse(ttl);
   const rdfs:any = {}
   let blanks = triples.filter(f=>f.subject.termType === "BlankNode");
@@ -157,6 +173,7 @@ function convObjectFromJson(json: any) {
         const o = predicts[idx];
         if (o.type === "bnode") {
           predicts[idx] = json[o.value];
+          predicts[idx].termType = "BlankNode";
           delete json[o.value];
         }
       }

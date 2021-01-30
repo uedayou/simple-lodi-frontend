@@ -31,11 +31,11 @@ const initialState: Result = {
   object: {}
 }
 
-function Top({uri}:Props) {
+function Top({uri}: Props) {
   const classes = useStyles();
   const [result, setResult] = useState(initialState)
   
-  async function getData(url:string) {
+  async function getData(url: string) {
     url = convUrlInDebug(url);
     const data = await getHttpData(url);
     if (data && typeof data !== "string") {

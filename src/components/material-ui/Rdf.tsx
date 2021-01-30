@@ -20,7 +20,7 @@ type Props = {
   rdfs: any
 }
 
-function Rdf({ rdfs }:Props) {
+function Rdf({ rdfs }: Props) {
   let geojson:any;
 
   return (
@@ -50,7 +50,7 @@ function Rdf({ rdfs }:Props) {
     </>
   );
 
-  function convGeoJsonFromRdfs(rdfs:any) {
+  function convGeoJsonFromRdfs(rdfs: any) {
     let prop = "http://www.opengis.net/ont/geosparql#asWKT";
     let geojsons = [];
     if (rdfs[prop]) {
@@ -78,15 +78,15 @@ function Rdf({ rdfs }:Props) {
 
 export default Rdf;
 
-function getProp(key:string) {
+function getProp(key: string) {
   if (key.match(new RegExp("^https?://.+$", "i"))) {
-    return <a href={key} target="_blank">{shorten(key)}</a>
+    return <a href={key} target="_blank" rel="noopener noreferrer">{shorten(key)}</a>
   } else {
     return shorten(key); 
   }
 }
 
-function getValues(v:any) {
+function getValues(v: any) {
   if (v) {
     if (v.termType === "BlankNode") {
       delete v.termType;

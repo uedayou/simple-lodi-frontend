@@ -47,6 +47,16 @@
 </script>
 
     <title>Simple Lodi Frontend</title>
+<!-- simplelodi で使う場合は、以下のコメントアウトを外してください -->
+<!--
+    <title>{{ title }}</title>
+    <script>{% for key,val in meta_names -%}</script>
+    <meta name="{{ key }}" content="{{ val }}">
+    <script>{% endfor -%}</script>
+    <script>{% for key,val in meta_props -%}</script>
+    <meta property="{{ key }}" content="{{ val }}">
+    <script>{% endfor -%}</script>
+-->
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
 
